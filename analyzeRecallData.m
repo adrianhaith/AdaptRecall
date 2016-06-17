@@ -103,38 +103,8 @@ switch what
         
     case 'actualseenendpoints'
         %%
-        % actual seen endpoints
-        for s=1:length(subjnames)
-            for i=1:data{s}.Ntrials
-                dist = sqrt(data{s}.X{i}.^2+data{s}.Y{i}.^2);
-                [maxDist ii] = max(dist);
-                data{s}.endX = data{s}.X{i}(ii);
-                data{s}.endY = data{s}.Y{i}(ii);
-                d.Xend(s,i) = data{s}.endX;
-                d.Yend(s,i) = data{s}.endY;
-            end
-        end
-        for s=1:length(subjnames)
-            for i=1:dataCtrl{s}.Ntrials
-                dist = sqrt(dataCtrl{s}.X{i}.^2+dataCtrl{s}.Y{i}.^2);
-                [maxDist ii] = max(dist);
-                dataCtrl{s}.endX = dataCtrl{s}.X{i}(ii);
-                dataCtrl{s}.endY = dataCtrl{s}.Y{i}(ii);
-                dCtrl.Xend(s,i) = dataCtrl{s}.endX;
-                dCtrl.Yend(s,i) = dataCtrl{s}.endY;
-            end
-        end
-        
-        for s=1:length(subjnames)
-            for i=1:dataGrad{s}.Ntrials
-                dist = sqrt(dataGrad{s}.X{i}.^2+dataGrad{s}.Y{i}.^2);
-                [maxDist ii] = max(dist);
-                dataGrad{s}.endX = dataGrad{s}.X{i}(ii);
-                dataGrad{s}.endY = dataGrad{s}.Y{i}(ii);
-                dGrad.Xend(s,i) = dataGrad{s}.endX;
-                dGrad.Yend(s,i) = dataGrad{s}.endY;
-            end
-        end
+
+
         %%---
         figure(3); clf; hold on
         plot(d.EndX','-','color',.7*[1 1 1]);
@@ -145,8 +115,8 @@ switch what
         plot(dCtrl.Xend','-','color',[1 .7 .7]);
         plot(meanNaN(dCtrl.EndX),'r.-','linewidth',2)
         plot(meanNaN(dCtrl.Xend),'r.-','linewidth',2)
-        plot(dGrad.EndX,'-','color',[0 1 0],'linewidth',2);
-        plot(dGrad.Xend,'-','color',[0 1 0],'linewidth',2);
+        plot(dGrad.EndX','-','color',[0 1 0],'linewidth',2);
+        plot(dGrad.Xend','-','color',[0 1 0],'linewidth',2);
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
@@ -161,7 +131,8 @@ switch what
         plot(meanNaN(d.EndY),'b.-','linewidth',2)
         plot(dCtrl.EndY','-','color',[1 .7 .7]);
         plot(meanNaN(dCtrl.EndY),'r.-','linewidth',2)
-        plot(dGrad.EndY,'-','color',[0 1 0],'linewidth',2);
+        plot(dGrad.EndY','-','color',[0 1 0],'linewidth',2);
+        plot(meanNaN(dGrad.EndY),'g.-','linewidth',2)
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
