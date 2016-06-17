@@ -503,7 +503,7 @@ Endpointgrad = [Endpointgrad1 Endpointgrad2];
     case 'ttest_interaction' 
         %% ttest group
 
-              w = 50;
+              w = 25;
               %Gain: calculate difference in means per subject between last 25
               %adaptation and first 25 gain
               DifMeanReachGain =  mean(d.reachDir(:,351:350+w),2)- mean(d.reachDir(:,351-w:350),2);

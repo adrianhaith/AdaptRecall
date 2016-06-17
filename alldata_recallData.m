@@ -89,15 +89,6 @@ end
 blklengths = [100 100 100 200 100];
 blkends = cumsum(blklengths);
 
-clear data
-clear dataCtrl
-clear dataGrad
-save('adaptrecall_alldat.mat')
-
-
-
-
-
-
-
-
+% only save the 'd' structures, not 'data' ones - they are massive since they
+% contain all the trajectories for each trial. 'd' is a compact summary.
+save adaptrecall_alldat d dCtrl dGrad

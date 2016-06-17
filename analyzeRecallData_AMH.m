@@ -1,5 +1,6 @@
 function ANA = analyzeRecallData(what,varargin)
 load('adaptrecall_alldat.mat')
+%{
  d.reachDir(10,:) = [];
  d.endPoint(10,:) = [];
  d.reachDir(4,:) = [];
@@ -13,7 +14,7 @@ load('adaptrecall_alldat.mat')
  d.subj = 1:size(d.reachDir,1);
  dCtrl.subj = 1:size(dCtrl.reachDir,1);
  dGrad.subj = 1:size(dGrad.reachDir,1);
-
+%}
 switch what
     
     case 'reachdirmean'
@@ -308,7 +309,7 @@ switch what
        
     case 'changereachdir'
         %% gain change
-        window = 10;
+        window = 25;
         
         for i = 1:size(d.reachDir,1)
             %d.SubjSwitch(i,1) = mean([d.reachDir(i,350) d.reachDir(i,351)]) ;
