@@ -1,0 +1,6 @@
+*.txt
+*.png
+*.mat
+*.emf
+*.asv
+!adaptrecall_alldat.mat
