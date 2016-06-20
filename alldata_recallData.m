@@ -9,11 +9,8 @@ for subj=1:length(subjnames)
     for trial=1:data{subj}.Ntrials;
         d.endPoint(subj,trial) = -rotDir(subj)*data{subj}.X{trial}(data{subj}.iEnd(trial));
     end
-    
     d.EndX(subj,:) = rotDir(subj)*data{subj}.tFile(:,8);
-    
     d.EndY(subj,:) = rotDir(subj)*data{subj}.tFile(:,9);
-    
 end
 d.Ntrials = 1:data{subj}.Ntrials;
 d.EndX(:,[101 202 303 504 605 ]) = [];

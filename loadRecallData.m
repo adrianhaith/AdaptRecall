@@ -12,9 +12,11 @@ for subj=1:length(subjnames)
     data{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
 end
 
+d = compactify_data(data,rotDir);
+
 %dlmread('C:/Users/DiedrichsenLab/Documents/Nicola/Adaptrecall/Experiment2/Data/Gain/S17/B1/tFile.tgt')
 
-save RecallData
+%save RecallData
 %% control
 groupname = 'Control';
 
@@ -25,8 +27,9 @@ rotDir = [1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1]; % rotation direction
 for subj=1:length(subjnames)
     dataCtrl{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
 end
+dCtrl = compactify_data(dataCtrl,rotDir);
 
-save RecallControlData
+%save RecallControlData
 
 %% gradual
 groupname = 'Gradual';
@@ -38,136 +41,8 @@ rotDir = [1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1]; % rotation direction
 for subj=1:length(subjnames)
     dataGrad{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
 end
+dGrad = compactify_data(dataGrad,rotDir);
 
-save RecallGradualData
-
-%%
-%{
-f = 1;
-
-s= [ 1 2 3 4 5];
-
-for j = 1
-    for t = 1:length(s)
-        
-        figure(3); hold on
-        
-        plot([f:f+length(data{j,t}.reachDir)-1],-(endposition_hand(j,1:length(data{j,t}.reachDir),t)),'.','color',.8*[0 0 1])
-        
-        f = f+length(data{j,t}.reachDir);
-        
-        
-    end
-end
-xlabel('Trial')
-ylabel('Endposition-X')
-
-plot([0 604],[0 0],'k-');
-plot([101 101],[-60 60],'k-');
-plot([202 202],[-60 60],'k-');
-plot([303 303],[-60 60],'k-');
-plot([353 353],[-60 60],'k--');
-plot([503 503],[-60 60],'k-');
-
-axis([ 0 605 -0.15 0.15]);
-f = 1;
-
-s= [ 1 2 3 4 5];
-for t = 1:length(s)
-    for j = 1
-        
-        
-        figure(1); hold on
-        
-        plot([f:f+length(data{j,t}.reachDir)-1],data{j,t}.reachDir,'.','color',.8*[1 0 0])
-        
-        
-        f = f+length(data{j,t}.reachDir);
-        
-        
-        
-    end
-end
-xlabel('Trial')
-ylabel('Reach Dir')
-axis([ 0 605 -80 80]);
-
-plot([0 604],[0 0],'k-');
-plot([101 101],[-60 60],'k-');
-plot([202 202],[-60 60],'k-');
-plot([303 303],[-60 60],'k-');
-plot([353 353],[-60 60],'k--');
-plot([503 503],[-60 60],'k-');
-
-
-
-endposition_hand_y = [];
-for i=1:length(subjnames)
-    for k=1:length(blocknames)
-        for trials = 1:length(data{i,k}.reachDir)
-            if isnan(data{i,k}.iEnd(trials))
-                endposition_hand_y(i,trials,k) = NaN;
-            else
-                endposition_hand_y(i,trials,k) = (data{i,k}.Y{trials}(data{i,k}.iEnd(trials))) ;
-                
-                
-            end
-            
-            
-        end
-    end
-end
-endposition_hand_y_cursor = [];
-endposition_hand_x_cursor = [];
-for i=1:length(subjnames)
-    for k=1:length(blocknames)
-        for trials = 1:length(data{i,k}.reachDir)
-            
-            if k == 4
-                endposition_hand_x_cursor(i,:,4) = data{i,4}.tFile(:,7);
-                endposition_hand_y_cursor(i,trials,4) = (sqrt((endposition_hand(i,trials,k)^2) + (endposition_hand_y(i,trials,k)^2))*0.6);
-                
-            end
-        end
-    end
-end
-
-
-success = [];
-for i=1:length(subjnames)
-    for k=1:length(blocknames)
-        for trials = 1:length(endposition_hand(i,:,k))
-            if k == 4
-                if (endposition_hand_x_cursor(i,trials,k) <=0.005) & (endposition_hand_x_cursor(i,trials,k) >=(-0.005));
-                    if (endposition_hand_y_cursor(i,trials,k) <=0.105) & (endposition_hand_y_cursor(i,trials,k)  >=0.095);
-                        
-                        
-                        success(i,trials,k) = 1;
-                    else
-                        success(i,trials,k) = 0;
-                    end
-                else
-                    success(i,trials,k) = 0;
-                end
-            else
-                if (endposition_hand(i,trials,k) <=0.005) & (endposition_hand(i,trials,k) >=(-0.005));
-                    if (endposition_hand_y(i,trials,k) <=0.105) & (endposition_hand_y(i,trials,k)  >=0.095);
-                        success(i,trials,k) = 1;
-                    else
-                        success(i,trials,k) = 0;
-                    end
-                else
-                    success(i,trials,k) = 0;
-                end
-                
-                
-            end
-        end
-    end
-end
-for k = 1:length(blocknames)
-    Amount_of_Ones(i,k) = (nnz(success(i,:,k)));
-    RatioCorrect(i,k) = (nnz(success(i,:,k))/length(data{i,k}.reachDir));
-end
-save testData data
-%}
+%save RecallGradualData
+save RecallData_all
+save RecallData_compact d dCtrl dGrad

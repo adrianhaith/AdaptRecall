@@ -98,7 +98,7 @@ d0 = 0*data.target;
 data.rPT = d0;
 data.reachDir = d0;
 data.d_dir = d0;
-data.RT = d0;
+data.iRT = d0;
 data.iDir = d0;
 data.iEnd = d0;
 
