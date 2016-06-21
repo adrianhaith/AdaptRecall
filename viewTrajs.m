@@ -59,6 +59,7 @@ for i=1:length(trialrng)
     
     %--- plot trajectory
     subplot(Nr,2,2:2:2*Nr); cla; hold on   
+    text(-.08,.05,['Trial ',num2str(ii)])
     plot(0,0,'ko','linewidth',2)
     plot(0,.1,'go','linewidth',2,'markersize',20)
     %plot(data.X{ii}(data.RT(ii):data.iEnd(ii)),data.Y{ii}(data.RT(ii):data.iEnd(ii)),'linewidth',2)

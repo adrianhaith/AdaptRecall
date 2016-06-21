@@ -66,6 +66,7 @@ for i=1:data.Ntrials
         iDir(i) = i_init+13; % measure direction 100ms after movement onset
         iReverse(i) = find(vel_filt(2,RT(i):end)<0,1,'first')+RT(i);
         Xreverse(i) = pos_filt(1,iReverse(i));
+        Yreverse(i) = pos_filt(2,iReverse(i));
         if(iDir>size(vel_filt,2)) % bad trial if movement onset was <100ms before movement end
             reachDir(i)=NaN;
             reachDir_unrot(i)=NaN;
@@ -94,4 +95,5 @@ data.yvel = vel_filt(2,:);
 data.iReverse = iReverse;
 data.pkVel = pV;
 data.Xreverse = Xreverse;
+data.Yreverse = Yreverse;
 

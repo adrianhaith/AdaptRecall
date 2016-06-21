@@ -4,4 +4,5 @@
 *.emf
 *.asv
 !adaptrecall_alldat.mat
+!RecallData_compact.mat
 JoernCode/

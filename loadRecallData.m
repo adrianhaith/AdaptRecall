@@ -10,9 +10,8 @@ rotDir = [-1 1 1 -1 -1 1 1 1 1 -1 -1 -1 1 -1]; % rotation direction
 
 for subj=1:length(subjnames)
     data{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
+    data{subj}.rotDir = rotDir(subj);
 end
-
-d = compactify_data(data,rotDir);
 
 %dlmread('C:/Users/DiedrichsenLab/Documents/Nicola/Adaptrecall/Experiment2/Data/Gain/S17/B1/tFile.tgt')
 
@@ -26,8 +25,8 @@ rotDir = [1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1]; % rotation direction
 
 for subj=1:length(subjnames)
     dataCtrl{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
+    dataCtrl{subj}.rotDir = rotDir(subj);
 end
-dCtrl = compactify_data(dataCtrl,rotDir);
 
 %save RecallControlData
 
@@ -40,9 +39,11 @@ rotDir = [1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1]; % rotation direction
 
 for subj=1:length(subjnames)
     dataGrad{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
+    dataGrad{subj}.rotDir = rotDir(subj);
 end
-dGrad = compactify_data(dataGrad,rotDir);
 
-%save RecallGradualData
+%%
 save RecallData_all
+compactify_all
+
 save RecallData_compact d dCtrl dGrad
