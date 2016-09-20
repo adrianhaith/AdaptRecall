@@ -101,15 +101,15 @@ switch what
         
         figure(1); clf; hold on
         %plot(d.reachDir','-','color',.7*[1 1 1]);
-        plot(meanNaN(d.reachDir),'b.-','linewidth',2)
+        plot(nanmean(d.reachDir),'b.-','linewidth',2)
         plot([blkends; blkends],[-100 100],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-100 100],'k--','linewidth',2)
         
         %plot(dCtrl.reachDir','-','color',[1 .7 .7]);
-        plot(meanNaN(dCtrl.reachDir),'r.-','linewidth',2)
+        plot(nanmean(dCtrl.reachDir),'r.-','linewidth',2)
         plot([0 610],[0 0],'k')
         
-        %plot(meanNaN(dGrad.reachDir)','m-','linewidth',2);
+        %plot(nanmean(dGrad.reachDir)','m-','linewidth',2);
         
         
         xlabel('Trial Number')
@@ -123,11 +123,11 @@ switch what
         
         figure(1); clf; hold on
         %plot(d.endPoint','-','color',.[.7 .7 1]);
-        plot(meanNaN(d.endPoint),'b.-','linewidth',2)
+        plot(nanmean(d.endPoint),'b.-','linewidth',2)
         %plot(dCtrl.endPoint','-','color',[1 .7 .7]);
-        plot(meanNaN(dCtrl.endPoint),'r.-','linewidth',2)
+        plot(nanmean(dCtrl.endPoint),'r.-','linewidth',2)
         %plot(dGrad.endPoint','-','color',.7*[.7 1 .7])
-        plot(meanNaN(dGrad.endPoint),'g.-','color',[0 1 0],'linewidth',2);
+        plot(nanmean(dGrad.endPoint),'g.-','color',[0 1 0],'linewidth',2);
         
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
@@ -141,9 +141,9 @@ switch what
     case 'Xreversemean'
         
         figure(1); clf; hold on
-        plot(meanNaN(d.Xreverse),'b.-','linewidth',2)
-        plot(meanNaN(dCtrl.Xreverse),'r.-','linewidth',2)
-        plot(meanNaN(dGrad.Xreverse),'g.-','color',[0 1 0],'linewidth',2);
+        plot(nanmean(d.Xreverse),'b.-','linewidth',2)
+        plot(nanmean(dCtrl.Xreverse),'r.-','linewidth',2)
+        plot(nanmean(dGrad.Xreverse),'g.-','color',[0 1 0],'linewidth',2);
         
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
@@ -156,9 +156,9 @@ switch what
     case 'reverseAnglemean'
         
         figure(1); clf; hold on
-        plot(meanNaN(d.reverseAngle),'b.-','linewidth',2)
-        plot(meanNaN(dCtrl.reverseAngle),'r.-','linewidth',2)
-        plot(meanNaN(dGrad.reverseAngle),'g.-','color',[0 1 0],'linewidth',2);
+        plot(nanmean(d.reverseAngle),'b.-','linewidth',2)
+        plot(nanmean(dCtrl.reverseAngle),'r.-','linewidth',2)
+        plot(nanmean(dGrad.reverseAngle),'g.-','color',[0 1 0],'linewidth',2);
         
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
@@ -173,12 +173,12 @@ switch what
         figure(3); clf; hold on
         plot(d.EndX','-','color',.7*[1 1 1]);
         plot(d.Xend','-','color',.7*[1 1 1]);
-        plot(meanNaN(d.EndX),'b.-','linewidth',2)
-        plot(meanNaN(d.Xend),'b.-','linewidth',2)
+        plot(nanmean(d.EndX),'b.-','linewidth',2)
+        plot(nanmean(d.Xend),'b.-','linewidth',2)
         plot(dCtrl.EndX','-','color',[1 .7 .7]);
         plot(dCtrl.Xend','-','color',[1 .7 .7]);
-        plot(meanNaN(dCtrl.EndX),'r.-','linewidth',2)
-        plot(meanNaN(dCtrl.Xend),'r.-','linewidth',2)
+        plot(nanmean(dCtrl.EndX),'r.-','linewidth',2)
+        plot(nanmean(dCtrl.Xend),'r.-','linewidth',2)
         plot(dGrad.EndX','-','color',[0 1 0],'linewidth',2);
         plot(dGrad.Xend','-','color',[0 1 0],'linewidth',2);
         
@@ -192,11 +192,11 @@ switch what
         %---
         figure(4); clf; hold on
         plot(d.EndY','-','color',.7*[1 1 1]);
-        plot(meanNaN(d.EndY),'b.-','linewidth',2)
+        plot(nanmean(d.EndY),'b.-','linewidth',2)
         plot(dCtrl.EndY','-','color',[1 .7 .7]);
-        plot(meanNaN(dCtrl.EndY),'r.-','linewidth',2)
+        plot(nanmean(dCtrl.EndY),'r.-','linewidth',2)
         plot(dGrad.EndY','-','color',[0 1 0],'linewidth',2);
-        plot(meanNaN(dGrad.EndY),'g.-','linewidth',2)
+        plot(nanmean(dGrad.EndY),'g.-','linewidth',2)
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
@@ -222,7 +222,7 @@ switch what
         axis([0 620 -30 80])
         plot([0 610],[0 0],'k')
         %end
-        plot(d.Ntrials,meanNaN(d.reachDir),'linewidth',2)
+        plot(d.Ntrials,nanmean(d.reachDir),'linewidth',2)
         
     case 'reachdircontrol'
         %close all
@@ -241,7 +241,7 @@ switch what
         axis([0 620 -30 80])
         plot([0 610],[0 0],'k')
         %end
-        plot(d.Ntrials,meanNaN(dCtrl.reachDir),'r','linewidth',2)
+        plot(d.Ntrials,nanmean(dCtrl.reachDir),'r','linewidth',2)
         
     case 'reachdirgradual'
         %close all
@@ -260,7 +260,7 @@ switch what
         axis([0 620 -30 80])
         plot([0 610],[0 0],'k')
         %end
-        plot(d.Ntrials,meanNaN(dGrad.reachDir),'m','linewidth',2)
+        plot(d.Ntrials,nanmean(dGrad.reachDir),'m','linewidth',2)
         
     case 'endpointgain'
         %close all
@@ -277,7 +277,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -7 15])
         %end
-        plot(d.Ntrials,meanNaN(d.endPoint),'b','linewidth',2)
+        plot(d.Ntrials,nanmean(d.endPoint),'b','linewidth',2)
         %keyboard
     case 'endpointcontrol'
         %close all
@@ -294,7 +294,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -7 15])
         %end
-        plot(d.Ntrials,meanNaN(dCtrl.endPoint),'r','linewidth',2)
+        plot(d.Ntrials,nanmean(dCtrl.endPoint),'r','linewidth',2)
         
     case 'endpointgradual'
         %close all
@@ -311,7 +311,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -7 15])
         %end
-        plot(d.Ntrials,meanNaN(dGrad.endPoint),'m','linewidth',2)
+        plot(d.Ntrials,nanmean(dGrad.endPoint),'m','linewidth',2)
         
     case 'Xreversegain'
         %close all
@@ -328,7 +328,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -.05 .15])
         %end
-        plot(d.Ntrials,meanNaN(d.Xreverse),'b','linewidth',2)
+        plot(d.Ntrials,nanmean(d.Xreverse),'b','linewidth',2)
         %keyboard
         
     case 'Xreversecontrol'
@@ -346,7 +346,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -.05 .15])
         %end
-        plot(d.Ntrials,meanNaN(dCtrl.Xreverse),'r','linewidth',2)
+        plot(d.Ntrials,nanmean(dCtrl.Xreverse),'r','linewidth',2)
         
     case 'Xreversegradual'
         %close all
@@ -363,7 +363,7 @@ switch what
         plot([0 610],[0 0],'k')
         axis([0 620 -.05 .15])
         %end
-        plot(d.Ntrials,meanNaN(dGrad.Xreverse),'m','linewidth',2)
+        plot(d.Ntrials,nanmean(dGrad.Xreverse),'m','linewidth',2)
         
         
     case 'changeendpoint'
