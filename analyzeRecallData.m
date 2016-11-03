@@ -1,6 +1,9 @@
 function ANA = analyzeRecallData(what,varargin)
+baseDir = 'C:\Users\npopp\Dropbox (Personal)\AdaptRecall-master';
+cd (baseDir);
+
 load('RecallData_compact.mat')
-addpath JoernCode
+%addpath JoernCode
 
 d.Block(1:100) = 1;
 d.Block(101:200) = 2;
@@ -36,22 +39,9 @@ if(excludesubjs)
     dGrad.endPoint(gradExclude,:) = NaN;
     dGrad.Xreverse(gradExclude,:) = NaN;
     
-    %{
-    %d.reachDir(9,:) = [];
-    %d.endPoint(9,:) = [];
-    %d.reachDir(4,:) = [];
-    %d.endPoint(4,:) = [];
-    
-    dCtrl.reachDir(10,:) = [];
-    dCtrl.endPoint(10,:) = [];
-    %  dCtrl.reachDir(7,:) = [];
-    %  dCtrl.endPoint(7,:) = [];
-    dGrad.reachDir(5,:) = [];
-    dGrad.endPoint(5,:) = [];
-    %}  
 end
 
-bad_trials_gain = [2 308; 2 396; 9 393; 90 396];
+bad_trials_gain = [2 308; 2 396; 9 393; 9 396];
 for i=1:length(bad_trials_gain)
     d.reachDir(bad_trials_gain(i,1),bad_trials_gain(i,2))= NaN;
 end
@@ -93,65 +83,69 @@ blkends = cumsum(blklengths);
 switch what
     
     case 'reachdirmean'
-        %% mean reachdir
-        figure(1); clf; hold on
-        %         d.reachDir([4 9],:) = NaN;
-        %         dGrad.reachDir(5,:) = NaN;
-        %d.reachDir(3,:) = NaN;
+        %% mean reachdir for gain,gradual and control
         
         figure(1); clf; hold on
-        %plot(d.reachDir','-','color',.7*[1 1 1]);
+        
         plot(nanmean(d.reachDir),'b.-','linewidth',2)
         plot([blkends; blkends],[-100 100],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-100 100],'k--','linewidth',2)
         
-        %plot(dCtrl.reachDir','-','color',[1 .7 .7]);
         plot(nanmean(dCtrl.reachDir),'r.-','linewidth',2)
         plot([0 610],[0 0],'k')
         
-        %plot(nanmean(dGrad.reachDir)','m-','linewidth',2);
-        
+        plot(nanmean(dGrad.reachDir)','m-','linewidth',2);
         
         xlabel('Trial Number')
         ylabel('Reach Direction')
         axis([0 620 -20 60])
         
     case 'endpointmean'
-        %figure(1)
-        %         d.endPoint([4 9],:) = NaN;
-        %         dGrad.endPoint(5,:) = NaN;
-        
+        %mean endpint offset for gain,gradual and control
         figure(1); clf; hold on
-        %plot(d.endPoint','-','color',.[.7 .7 1]);
+        
         plot(nanmean(d.endPoint),'b.-','linewidth',2)
-        %plot(dCtrl.endPoint','-','color',[1 .7 .7]);
         plot(nanmean(dCtrl.endPoint),'r.-','linewidth',2)
-        %plot(dGrad.endPoint','-','color',.7*[.7 1 .7])
         plot(nanmean(dGrad.endPoint),'g.-','color',[0 1 0],'linewidth',2);
         
-        
-        plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
+        plot([blkends; blkends],[-10 15],'k','linewidth',2)
+        plot((blkends(3)+50)*[1 1],[-10 15],'k--','linewidth',2)
         xlabel('Trial Number')
         ylabel('Endpoint')
         plot([0 610],[0 0],'k')
-        axis([0 620 -.07 .15])
+        axis([0 620 -10 15])
         
         
     case 'Xreversemean'
         
+        % smoothed estimates of endpoint mean
         figure(1); clf; hold on
         plot(nanmean(d.Xreverse),'b.-','linewidth',2)
         plot(nanmean(dCtrl.Xreverse),'r.-','linewidth',2)
         plot(nanmean(dGrad.Xreverse),'g.-','color',[0 1 0],'linewidth',2);
         
+ plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
+        plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
+        xlabel('Trial Number')
+        ylabel('Endpoint')
+        plot([0 500],[0 0],'k')
+        axis([0 500 -.07 .12])
         
+        
+ figure(2); clf; hold on   
+ shadedErrorBar([],nanmean(d.Xreverse),nanstd(d.Xreverse)/sqrt((length(d.subj)-1)),{'r-o','markerfacecolor','r'},1);    
+ hold on
+ shadedErrorBar([],nanmean(dCtrl.Xreverse),nanstd(d.Xreverse)/sqrt((length(d.subj)-2)),{'b-o','markerfacecolor','b'},1);   
+ hold on
+ shadedErrorBar([],nanmean(dGrad.Xreverse),nanstd(d.Xreverse)/sqrt((length(d.subj)-2)),{'-o','markerfacecolor',[0.128 0.128 0.128],'Color',[0.128 0.128 0.128]},1);    
+ 
+
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
         xlabel('Trial Number')
         ylabel('Endpoint')
-        plot([0 610],[0 0],'k')
-        axis([0 620 -.07 .15])
+        plot([0 500],[0 0],'k')
+        axis([0 500 -.05 .1])
         
     case 'reverseAnglemean'
         
@@ -166,21 +160,21 @@ switch what
         xlabel('Trial Number')
         ylabel('Endpoint')
         plot([0 610],[0 0],'k')
-        % axis([0 620 -.07 .15])
+        
     case 'actualseenendpoints'
         
-        %%---
         figure(3); clf; hold on
         plot(d.EndX','-','color',.7*[1 1 1]);
-        plot(d.Xend','-','color',.7*[1 1 1]);
+        %plot(d.Xend','-','color',.7*[1 1 1]);
         plot(nanmean(d.EndX),'b.-','linewidth',2)
-        plot(nanmean(d.Xend),'b.-','linewidth',2)
+        %plot(nanmean(d.Xend),'b.-','linewidth',2)
         plot(dCtrl.EndX','-','color',[1 .7 .7]);
-        plot(dCtrl.Xend','-','color',[1 .7 .7]);
+        %plot(dCtrl.Xend','-','color',[1 .7 .7]);
         plot(nanmean(dCtrl.EndX),'r.-','linewidth',2)
-        plot(nanmean(dCtrl.Xend),'r.-','linewidth',2)
+        % plot(nanmean(dCtrl.Xend),'r.-','linewidth',2)
         plot(dGrad.EndX','-','color',[0 1 0],'linewidth',2);
-        plot(dGrad.Xend','-','color',[0 1 0],'linewidth',2);
+        % plot(dGrad.Xend','-','color',[0 1 0],'linewidth',2);
+        plot(nanmean(dGrad.EndX),'-','color',[0 1 0],'linewidth',2);
         
         plot([blkends; blkends],[-.15 .15],'k','linewidth',2)
         plot((blkends(3)+50)*[1 1],[-.15 .15],'k--','linewidth',2)
@@ -204,114 +198,6 @@ switch what
         ylabel('Endpoint')
         plot([0 610],[0 0],'k')
         axis([0 620 -.1 .2])
-        
-        
-    case 'reachdirgain'
-        %close all
-        %for i = 1:length(d.subj)
-        figure(1); clf; hold on
-        
-        %subplot(4,3,i)
-        hold on
-        plot(d.Ntrials',d.reachDir','color',.6*[1 1 1])
-        
-        plot([blkends; blkends],[-100 100],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-100 100],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Reach Direction')
-        axis([0 620 -30 80])
-        plot([0 610],[0 0],'k')
-        %end
-        plot(d.Ntrials,nanmean(d.reachDir),'linewidth',2)
-        
-    case 'reachdircontrol'
-        %close all
-        %for i = 1:length(dCtrl.subj)
-        
-        
-        figure(1); clf; hold on
-        
-        %subplot(4,3,i)
-        hold on
-        plot(dCtrl.Ntrials',dCtrl.reachDir','color',.6*[1 1 1])
-        plot([blkends; blkends],[-100 100],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-100 100],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Reach Direction')
-        axis([0 620 -30 80])
-        plot([0 610],[0 0],'k')
-        %end
-        plot(d.Ntrials,nanmean(dCtrl.reachDir),'r','linewidth',2)
-        
-    case 'reachdirgradual'
-        %close all
-        
-        %for i = 1:length(dGrad.subj)
-        
-        figure(1); clf; hold on
-        
-        %subplot(4,3,i)
-        hold on
-        plot(dGrad.Ntrials',dGrad.reachDir','color',.6*[1 1 1])
-        plot([blkends; blkends],[-100 100],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-100 100],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Reach Direction')
-        axis([0 620 -30 80])
-        plot([0 610],[0 0],'k')
-        %end
-        plot(d.Ntrials,nanmean(dGrad.reachDir),'m','linewidth',2)
-        
-    case 'endpointgain'
-        %close all
-        %for i = 1:length(d.subj)
-        
-        figure(1); clf; hold on
-        %subplot(4,3,i)
-        hold on
-        plot(d.Ntrials',d.endPoint','color',.6*[1 1 1])
-        plot([blkends; blkends],[-15 15],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-15 15],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Endpoint')
-        plot([0 610],[0 0],'k')
-        axis([0 620 -7 15])
-        %end
-        plot(d.Ntrials,nanmean(d.endPoint),'b','linewidth',2)
-        %keyboard
-    case 'endpointcontrol'
-        %close all
-        %for i = 1:length(dCtrl.subj)
-        
-        figure(1); clf; hold on
-        %subplot(4,3,i)
-        hold on
-        plot(dCtrl.Ntrials',dCtrl.endPoint','color',.6*[1 1 1])
-        plot([blkends; blkends],[-15 15],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-15 15],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Endpoint')
-        plot([0 610],[0 0],'k')
-        axis([0 620 -7 15])
-        %end
-        plot(d.Ntrials,nanmean(dCtrl.endPoint),'r','linewidth',2)
-        
-    case 'endpointgradual'
-        %close all
-        %for i = 1:length(dGrad.subj)
-        figure(1); clf; hold on
-        %subplot(4,3,i)
-        
-        hold on
-        plot(dGrad.Ntrials',dGrad.endPoint','color',.6*[1 1 1])
-        plot([blkends; blkends],[-15 15],'k','linewidth',2)
-        plot((blkends(3)+50)*[1 1],[-15 15],'k--','linewidth',2)
-        xlabel('Trial Number')
-        ylabel('Endpoint')
-        plot([0 610],[0 0],'k')
-        axis([0 620 -7 15])
-        %end
-        plot(d.Ntrials,nanmean(dGrad.endPoint),'m','linewidth',2)
         
     case 'Xreversegain'
         %close all
@@ -368,12 +254,6 @@ switch what
         
     case 'changeendpoint'
         %% gain change
-        
-        %         for i = 1:size(d.endPoint,1)
-        %             d.SubjSwitch(i,1) = nanmean([d.endPoint(i,350) d.endPoint(i,351)]) ;
-        %             dCtrl.SubjSwitch(i,1) = nanmean([dCtrl.endPoint(i,350) dCtrl.endPoint(i,351)]) ;
-        %             dGrad.SubjSwitch(i,1) = nanmean([dGrad.endPoint(i,350) dGrad.endPoint(i,351)]) ;
-        %         end
         w = 25;
         for i = 1:size(d.endPoint,1)
             d.SubjEndPMean(i,1) = nanmean(d.endPoint(i,350-w+1:350)) ;
@@ -466,23 +346,22 @@ switch what
         
     case 'changeXreverse'
         % gain change
-        w = 25;
-        for i = 1:size(d.Xreverse,1)
-            %d.SubjSwitch(i,1) = mean([d.Xreverse(i,350) d.Xreverse(i,351)]) ;
-            %dCtrl.SubjSwitch(i,1) = mean([dCtrl.Xreverse(i,350) dCtrl.Xreverse(i,351)]) ;
-            %dGrad.SubjSwitch(i,1) = mean([dGrad.Xreverse(i,350) dGrad.Xreverse(i,351)]) ;
-        end
+        % 25 trials before and after gain onset
         
-        d.SubjEndPMean(:,1) = nanmean(d.Xreverse(:,350-w+1:350)');% - d.SubjSwitch(i) ;
-        d.SubjEndPMean(:,2) = nanmean(d.Xreverse(:,351:350+w)');%  - d.SubjSwitch(i) ;
-        dCtrl.SubjEndPMean(:,1) = nanmean(dCtrl.Xreverse(:,350-w+1:350)');% - dCtrl.SubjSwitch(i) ;
-        dCtrl.SubjEndPMean(:,2) = nanmean(dCtrl.Xreverse(:,351:350+w)');%  - dCtrl.SubjSwitch(i) ;
-        dGrad.SubjEndPMean(:,1) = nanmean(dGrad.Xreverse(:,350-w+1:350)');% - dGrad.SubjSwitch(i) ;
-        dGrad.SubjEndPMean(:,2) = nanmean(dGrad.Xreverse(:,351:350+w)');%  - dGrad.SubjSwitch(i) ;
+        w = 25;
+        
+        
+        d.SubjEndPMean(:,1) = nanmean(d.Xreverse(:,350-w+1:350)');
+        d.SubjEndPMean(:,2) = nanmean(d.Xreverse(:,351:350+w)');
+        dCtrl.SubjEndPMean(:,1) = nanmean(dCtrl.Xreverse(:,350-w+1:350)');
+        dCtrl.SubjEndPMean(:,2) = nanmean(dCtrl.Xreverse(:,351:350+w)');
+        dGrad.SubjEndPMean(:,1) = nanmean(dGrad.Xreverse(:,350-w+1:350)');
+        dGrad.SubjEndPMean(:,2) = nanmean(dGrad.Xreverse(:,351:350+w)');
         
         ttest(d.SubjEndPMean(:,2),d.SubjEndPMean(:,1),1,'paired')
         ttest(dCtrl.SubjEndPMean(:,2),dCtrl.SubjEndPMean(:,1),1,'paired')
         ttest(dGrad.SubjEndPMean(:,2),dGrad.SubjEndPMean(:,1),1,'paired')
+        
         close all
         figure(1);
         
@@ -490,27 +369,45 @@ switch what
         hold on
         
         for i = 1:size(d.SubjEndPMean,1)
-            plot([1 2],d.SubjEndPMean(i,:),'-or');
+            hold on
+            h = plot([1 2],d.SubjEndPMean(i,:),'.-r');
+            h.Color(4) = 0.4;
         end
         iplot = find(~isnan(d.SubjEndPMean(:)));
-        lineplot([ones(size(d.SubjEndPMean(iplot),1)/2,1); 2*ones(size(d.SubjEndPMean(iplot),1)/2,1)],d.SubjEndPMean(iplot),'style_thickline');
-        
+        lineplot([ones(size(d.SubjEndPMean(iplot),1)/2,1); 2*ones(size(d.SubjEndPMean(iplot),1)/2,1)],d.SubjEndPMean(iplot),'style_thickline','linecolor',[1 0 0],'markercolor',[1 0 0],'errorcolor',[1 0 0]);
+        ax = gca;
+        ax.XTickLabel = {'Before Gain Onset','After Gain onset'}
+        ylabel('Horizontal Endpoint Offset')
+        axis([0.8 2.2,-0.02 0.04])
+
         subplot(1,3,2)
         hold on
         
         for i = 1:size(dCtrl.SubjEndPMean,1)
-            plot([1 2],dCtrl.SubjEndPMean(i,:),'-ok')
+            hold on
+            ha = plot([1 2],dCtrl.SubjEndPMean(i,:),'.-b');
+            ha.Color(4) = 0.4;
         end
         iplot = find(~isnan(dCtrl.SubjEndPMean(:)));
-        lineplot([ones(size(dCtrl.SubjEndPMean(iplot),1)/2,1); 2*ones(size(dCtrl.SubjEndPMean(iplot),1)/2,1)],dCtrl.SubjEndPMean(iplot),'style_thickline');
-        %dGrad.SubjEndPMean(8,:) = [];
+        lineplot([ones(size(dCtrl.SubjEndPMean(iplot),1)/2,1); 2*ones(size(dCtrl.SubjEndPMean(iplot),1)/2,1)],dCtrl.SubjEndPMean(iplot),'style_thickline','linecolor',[0 0 1],'markercolor',[0 0 1],'errorcolor',[0 0 1]);
+        ax = gca;
+        ax.XTickLabel = {'Before Gain Onset','After Gain onset'}
+        ylabel('Horizontal Endpoint Offset')
+        axis([0.8 2.2,-0.02 0.04])
+        
         subplot(1,3,3)
         hold on
         for i = 1:size(dGrad.SubjEndPMean,1)
-            plot([1 2],dGrad.SubjEndPMean(i,:),'-og')
+            hb = plot([1 2],dGrad.SubjEndPMean(i,:),'.-','Color',[0.128,0.128,0.128]);
+            hb.Color(4) = 0.4;     
         end
         iplot = find(~isnan(dGrad.SubjEndPMean(:)));
-        lineplot([ones(size(dGrad.SubjEndPMean(iplot),1)/2,1); 2*ones(size(dGrad.SubjEndPMean(iplot),1)/2,1)],dGrad.SubjEndPMean(iplot),'style_thickline');
+        lineplot([ones(size(dGrad.SubjEndPMean(iplot),1)/2,1); 2*ones(size(dGrad.SubjEndPMean(iplot),1)/2,1)],dGrad.SubjEndPMean(iplot),'style_thickline','linecolor',[0.128,0.128,0.128],'markercolor',[0.128,0.128,0.128],'errorcolor',[0.128,0.128,0.128]);
+        ax = gca;
+        ax.XTickLabel = {'Before Gain Onset','After Gain onset'};
+        ylabel('Horizontal Endpoint Offset')
+        axis([0.8 2.2,-0.02 0.04])
+        
         
     case 'endpointvsreach'
         %%check out endpoint vs reachdir
@@ -609,6 +506,7 @@ switch what
         plot(mean(dGrad.endPoint(:,351:376)*100,2),'om')
         xlabel('Subj')
         ylabel('endPoint')
+        
         %Gain: calculate difference in means per subject between last 25
         %adaptation and first 25 gain
         DifMeanReachDir =  mean(d.reachDir(:,195:220),2) - mean(d.reachDir(:,351:376),2);
@@ -632,32 +530,38 @@ switch what
         
         %compare difference
         ttest(DifMeanReachDir,DifMeanErrorDir,'2','paired')
+        
     case 'Anova'
         %% Anova
-        Endpoint1 = d.endPoint(:,325:350);
-        Endpoint2 = d.endPoint(:,351:376);
+        Endpoint1 = d.Xreverse(:,326:350);
+        Endpoint2 = d.Xreverse(:,351:375);
         Endpoint = [Endpoint1 Endpoint2];
         vEndpointGa = reshape(permute(Endpoint,[2 1]),[length(Endpoint(:)) 1])*100 ;
         vSubjGa =  kron(d.subj,ones(size(Endpoint,2),1));
         
-        Endpointco1 = dCtrl.endPoint(:,325:350);
-        Endpointco2 = dCtrl.endPoint(:,351:376);
+        Endpointco1 = dCtrl.Xreverse(:,326:350);
+        Endpointco2 = dCtrl.Xreverse(:,351:375);
         Endpointco = [Endpointco1 Endpointco2];
         vSubjCo =  kron(dCtrl.subj,ones(size(Endpointco,2),1));
         vEndpointCo = reshape(permute(Endpointco,[2 1]),[length(Endpointco(:)) 1])*100 ;
         
-        Endpointgrad1 = dGrad.endPoint(:,325:350);
-        Endpointgrad2 = dGrad.endPoint(:,351:376);
+        Endpointgrad1 = dGrad.Xreverse(:,326:350);
+        Endpointgrad2 = dGrad.Xreverse(:,351:375);
         Endpointgrad = [Endpointgrad1 Endpointgrad2];
         vSubjGrad =  kron(dGrad.subj,ones(size(Endpointgrad,2),1));
         vEndpointGrad = reshape(permute(Endpointgrad,[2 1]),[length(Endpointgrad(:)) 1])*100 ;
-        
+        v.BeforeAfter = kron([ones(1,25) 2*ones(1,25)],ones(size([d.subj dCtrl.subj dGrad.subj],2),1))';
+
         v.Subj = [vSubjGa(:); vSubjCo(:) ;vSubjGrad(:)];
         v.Endpoint = [vEndpointGa ; vEndpointCo ; vEndpointGrad];
         v.Group = [ones(length(vSubjGa(:)),1);2*ones(length(vSubjCo(:)),1); 3*ones(length(vSubjGrad(:)),1)];
-        v.BeforeAfter = kron([ones(1,26) 2*ones(1,26)],ones(size([d.subj dCtrl.subj dGrad.subj],2),1))';
+        v.BeforeAfter = v.BeforeAfter(:);
         
-        
+        v.Group(isnan(v.Endpoint)) = [];
+        v.Subj(isnan(v.Endpoint)) = [];
+        v.BeforeAfter(isnan(v.Endpoint)) = [];
+        v.Endpoint(isnan(v.Endpoint)) = [];
+
         results=anovaMixed(v.Endpoint,v.Subj, 'within',v.BeforeAfter(:) ,{'BeforeafterGain'},'between',v.Group,{'Group'},'intercept',1);
         
         
@@ -690,21 +594,7 @@ switch what
         DifMeanErrorGrad =  mean(dGrad.endPoint(:,351:350+w),2) - mean(dGrad.endPoint(:,351-w:350),2);
         DifMeanXRevGrad =  mean(dGrad.Xreverse(:,351:350+w),2) - mean(dGrad.Xreverse(:,351-w:350),2);
         
-        %{
-        %compare difference Gain - Control
-        ttest(DifMeanErrorGain,DifMeanErrorControl,1,'independent')
-        %compare difference Gain - Grad
-        ttest(DifMeanErrorGain,DifMeanErrorGrad,1,'independent')
-        %compare difference  Grad - Control
-        ttest(DifMeanErrorGrad,DifMeanErrorControl,2,'independent')
-        
-        %compare difference Gain - Control
-        ttest(DifMeanReachGain,DifMeanReachControl,1,'independent')
-        %compare difference Gain - Grad
-        ttest(DifMeanReachGain,DifMeanReachGrad,1,'independent')
-        %compare difference  Grad - Control
-        ttest(DifMeanReachGrad,DifMeanReachControl,2,'independent')
-        %}
+       
         ttest(DifMeanXRevGain,DifMeanXRevControl,2,'independent')
         ttest(DifMeanXRevGain,DifMeanXRevGrad,2,'independent')
         ttest(DifMeanXRevControl,DifMeanXRevGrad,2,'independent')
