@@ -1,5 +1,18 @@
 
 clear all
+%% gradual long
+groupname = 'Gradual_Long';
+subjnames = {'200.289','200.328','200.336','200.338','200.341','200.342','200.344','200.358','200.360','200.361','200.362','200.363','200.366','200.367'};
+%
+blocknames = {'B1','B2','B3','B4'};
+rotDir = [1 -1 1 1 -1 -1 1 -1 -1 -1 1 1 -1 1];
+
+for subj=1:length(subjnames)
+    dataGradLong{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
+    dataGradLong{subj}.rotDir = rotDir(subj);
+end
+
+%%
 groupname = 'Gain';
 
 subjnames = {'S17','S18','S19','S20','S21','S23','S24','S25','200.240','200.243','200.248','200.249','200.299','200.300'}; % ctrl: 'S22'
@@ -41,6 +54,8 @@ for subj=1:length(subjnames)
     dataGrad{subj} = LoadAllSubData(groupname,[subjnames{subj}],blocknames);
     dataGrad{subj}.rotDir = rotDir(subj);
 end
+
+
 
 %%
 save RecallData_all
